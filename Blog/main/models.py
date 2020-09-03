@@ -13,6 +13,7 @@ class Post(models.Model):
     post = models.TextField()
     date_created = models.DateField()
     comment_count = models.IntegerField()
+    view_count = models.IntegerField(default=0)
     category = models.ManyToManyField(Categories)
     featured = models.BooleanField(default=False)
 

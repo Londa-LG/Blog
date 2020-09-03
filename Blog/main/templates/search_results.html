@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+      <div class="row">
+        <!-- Latest Posts -->
+        <main class="posts-listing col-lg-8">
+          <div class="container">
+            <h3 class="h4">Search Results:</h3></a>
+            <br/>
+            <br/>
+            <div class="row">
+              <!-- post -->
+              {% for post in post_list %}
+              <div class="post col-xl-6">
+                <div class="post-thumbnail"><a href="post.html"><img src="{{ post.thumbnail.url }}" alt="..." class="img-fluid"></a></div>
+                <div class="post-details">
+                  <div class="post-meta d-flex justify-content-between">
+                    {% for cat in post.category.all %}
+                    <div class="category"><a href="#">{{ cat }}</a></div>
+                    {% endfor %}
+                  </div><a href="post.html">
+                    <h3 class="h4">{{ post.title }}</h3></a>
+                  <p class="text-muted">{{ post.post_description }}</p>
+                  <footer class="post-footer d-flex align-items-center">
+                    <div class="date"><i class="icon-clock"></i>{{ post.date_created | timesince }} ago</div>
+                    <div class="comments meta-last"><i class="icon-comment"></i>{{ post.comment_count }}</div>
+                  </footer>
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </main>
+        <aside class="col-lg-4">
+          <!-- Widget [Search Bar Widget]-->
+          <div class="widget search">
+            <header>
+              <h3 class="h6">Search the blog</h3>
+            </header>
+            <form action="{% url 'main:search_results' %}" class="search-form">
+              <div class="form-group">
+                <input type="text" name="search" placeholder="What are you looking for?">
+                <button type="submit" class="submit"><i class="icon-search"></i></button>
+              </div>
+            </form>
+          </div>
+        </aside>
+      </div>
+    </div>
+{% endblock content %}
