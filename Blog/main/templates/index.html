@@ -40,7 +40,7 @@
                     <a href="#">{{ cat }}</a>
                     {% endfor %}
                   </div>
-                  <a href="post.html"><h2 class="h4">{{posts.title}}</h2></a>
+                  <a href="{{ posts.get_absolute_url }}"><h2 class="h4">{{posts.title}}</h2></a>
                 </header>
                 <p>{{posts.post_description}}</p>
                 <footer class="post-footer d-flex align-items-center">
@@ -76,15 +76,17 @@
         <div class="row">
           {% for post in latest %}
           <div class="post col-md-4">
-            <div class="post-thumbnail"><a href="#"><img src="{{ post.thumbnail.url }}" alt="..." class="img-fluid"></a></div>
+            <div class="post-thumbnail"><a href="{{ post.get_absolute_url }}"><img src="{{ post.thumbnail.url }}" alt="..." class="img-fluid"></a></div>
             <div class="post-details">
               <div class="post-meta d-flex justify-content-between">
                 <div class="date">{{ post.date_created | timesince }} ago</div>
                 {% for cat in post.category.all %}
                 <div class="category"><a href="#">{{ cat }}</a></div>
                 {% endfor %}
-              </div><a href="post.html">
-                <h3 class="h4">{{ post.title }}</h3></a>
+              </div>
+              <a href="{{ post.get_absolute_url }}">
+                <h3 class="h4">{{ post.title }}</h3>
+              </a>
               <p class="text-muted">{{ post.post_description }}</p>
             </div>
           </div>

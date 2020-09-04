@@ -1,8 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Count, Q
 
+
 from .models import Post
+from .forms import CommentForm
 from marketing.models import Signup
 
 def Category_count():
@@ -19,10 +21,10 @@ def Search(request):
             Q(post_description__icontains=query) |
             Q(post__icontains=query)
         ).distinct()
-    content ={
+    context ={
         'post_list': post_list
     }
-    return render(request, 'search_results.html', content)
+    return render(request, 'search_results.html', context)
 
 
 def Home(request):
@@ -35,11 +37,11 @@ def Home(request):
         new_signup.email = email
         new_signup.save()
 
-    content = {
+    context = {
         'featured': featured,
         'latest': latest
     }
-    return render(request, 'index.html', content)
+    return render(request, 'index.html', context)
 
 def BlogPosts(request):
     category_count = Category_count()
@@ -55,13 +57,27 @@ def BlogPosts(request):
     except EmptyPage:
         pagination_qs = paginator.page(paginator.num_pages)
 
-    content = {
+    context = {
         'pagination': pagination_qs,
         'page_var': page_request_var,
         'latest': latest,
         'category_count': category_count
     }
-    return render(request, 'blog.html', content)
+    return render(request, 'blog.html', context)
 
-def ViewedPost(request):
-    return render(request,'post.html')
+def ViewedPost(request,id):
+    post = Post.objects.filter(id=id)
+    category_count = Category_count()
+    latest = Post.objects.order_by('-date_created')[0:3]
+    form = CommentForm(request.POST or None)
+    if request.method == "POST":
+        if form.is_valid():
+            form.instance.post = post
+            form.save()
+    context = {
+        'latest': latest,
+        'category_count': category_count,
+        'post': post,
+        'form': form,
+    }
+    return render(request, 'post.html', context)
