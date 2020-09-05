@@ -53,17 +53,19 @@
                   <header>
                     <h3 class="h6">Post Comments<span class="no-of-comments">(3)</span></h3>
                   </header>
+                  {% for content in comments %}
                   <div class="comment">
                     <div class="comment-header d-flex justify-content-between">
                       <div class="user d-flex align-items-center">
                         <div class="image"><img src="{% static 'img/user.svg' %}" alt="..." class="img-fluid rounded-circle"></div>
-                        <div class="title"><strong>Jabi Hernandiz</strong><span class="date">May 2016</span></div>
+                        <div class="title"><strong>{{ content.Name }}</strong><span class="date">{{ content.date_commented | timesince }} ago</span></div>
                       </div>
                     </div>
                     <div class="comment-body">
-                      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
+                      <p>{{ content.comment }}</p>
                     </div>
                   </div>
+                  {% endfor %}
                   {% comment %}
                   <div class="comment">
                     <div class="comment-header d-flex justify-content-between">

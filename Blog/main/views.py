@@ -3,7 +3,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Count, Q
 
 
-from .models import Post
+from .models import Post, Comments
 from .forms import CommentForm
 from marketing.models import Signup
 
@@ -67,17 +67,20 @@ def BlogPosts(request):
 
 def ViewedPost(request,id):
     post = Post.objects.filter(id=id)
+    item = get_object_or_404(Post, id=id)
+    comment_qs = Comments.objects.filter(post=item)
     category_count = Category_count()
     latest = Post.objects.order_by('-date_created')[0:3]
     form = CommentForm(request.POST or None)
     if request.method == "POST":
         if form.is_valid():
-            form.instance.post = post
+            form.instance.post = item
             form.save()
     context = {
         'latest': latest,
         'category_count': category_count,
         'post': post,
         'form': form,
+        'comments': comment_qs
     }
     return render(request, 'post.html', context)
